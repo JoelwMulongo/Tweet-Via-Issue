@@ -1,0 +1,36 @@
+name: Send a Tweet from an Issue
+
+on:
+  workflow_dispatch:
+  issues:
+    types: [opened, edited]
+    
+jobs:
+  post-tweet:
+    name: Create and Post a Tweet from an Issue
+    if: contains(github.event.issue.labels.*.name, 'tweet')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cloning the repo
+        uses: actions/checkout@v3
+      
+      - name: Getting data from Issue Form
+        uses: stefanbuck/github-issue-parser@v3
+        id: issue-parser
+        with:
+          template-path: .github/ISSUE_TEMPLATE/tweet.yml
+    
+      - name: Posting the Tweet
+        uses: ethomson/send-tweet-action@v1
+        with:
+          status: "${{ steps.issue-parser.outputs.issueparser_message }}"
+          consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
+          consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
+          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+
+      - name: Closing the Issue with a Comment
+        uses: YiiGuxing/close-issue@v2.1.0
+        with:
+          comment: "Tweet posted! :tada:"

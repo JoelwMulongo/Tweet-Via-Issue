@@ -1,0 +1,12 @@
+name: Send your Tweet
+title: New Tweet
+description: Tweet by creating a new issue
+labels: ["tweet"]
+body:
+  - type: textarea
+    id: message
+    attributes:
+      label: Tweet message
+      description: Please enter your Tweet message.
+    validations:
+      required: true
