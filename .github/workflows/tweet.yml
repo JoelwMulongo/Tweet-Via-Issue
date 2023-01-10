@@ -19,7 +19,7 @@ jobs:
         uses: stefanbuck/github-issue-parser@v3
         id: issue-parser
         with:
-          template-path: .github/ISSUE_TEMPLATE/tweet.yml
+          template-path: .github/ISSUE_TEMPLATE/tweet.yaml
     
       - name: Posting the Tweet
         uses: ethomson/send-tweet-action@v1
